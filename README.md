@@ -1,1 +1,1 @@
-# FntasticTestAI
+# TestAI
