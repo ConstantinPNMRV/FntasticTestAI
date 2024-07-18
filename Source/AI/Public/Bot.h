@@ -3,19 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BehaviorTree/BehaviorTree.h"
 #include "Navigation/CrowdFollowingComponent.h"
 #include "GameFramework/Character.h"
 #include "Bot.generated.h"
-
-
 
 UCLASS()
 class TESTAI_API ABot : public ACharacter
 {
 	GENERATED_BODY()
-
-public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
@@ -29,10 +24,8 @@ private:
 	int32 HitCounter = 0;
 
 public:
-	// Sets default values for this character's properties
 	ABot();
 
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Получение дерева поведения
@@ -44,7 +37,6 @@ public:
 	void SetEnableBehaviorTree(bool IsOn);
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	// Фиксация получения урона

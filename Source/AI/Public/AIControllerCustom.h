@@ -4,24 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "BehaviorTree/BlackboardComponent.h"
 #include "Bot.h"
 #include "Perception/AIPerceptionComponent.h"
-#include "Perception/AISenseConfig_Sight.h"
-#include "Perception/AISenseConfig_Hearing.h"
-#include "Perception/AISenseConfig_Damage.h"
 #include "AIControllerCustom.generated.h"
 
-class UBehaviorTree;
-class UBlackboardComponent;
-class Abot;
+class UAISenseConfig_Sight;
+class UAISenseConfig_Hearing;
+class UAISenseConfig_Damage;
 
 UCLASS()
 class TESTAI_API AAIControllerCustom : public AAIController
 {
 	GENERATED_BODY()
-	
-public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Protected|Components")

@@ -1,12 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "AIControllerCustom.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionSystem.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Hearing.h"
+#include "Perception/AISenseConfig_Damage.h"
 
 AAIControllerCustom::AAIControllerCustom(FObjectInitializer const& ObjectInitializer)
 {
@@ -50,7 +53,6 @@ void AAIControllerCustom::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-
 void AAIControllerCustom::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -79,19 +81,24 @@ void AAIControllerCustom::BindOnTargetPerceptionUpdated(AActor* Actor, FAIStimul
 
 	if (UGameplayStatics::GetPlayerPawn(this, 0) == PlayerEnemy)
 	{
-		if (SenseName == "AISense_Hearing") BotHearingHandler();
-		else if (SenseName == "AISense_Sight") BotVisionHandler();
+		if (SenseName == "AISense_Hearing")
+			BotHearingHandler();
+		else if (SenseName == "AISense_Sight")
+			BotVisionHandler();
 	}
 	else
 	{
-		if (SenseName == "AISense_Damage") BotDamageHandler();
+		if (SenseName == "AISense_Damage")
+			BotDamageHandler();
 	}
 }
 
 void AAIControllerCustom::SetEnableBehaviorTree(bool IsOn) const
 {
-	if (IsOn) BrainComponent->StartLogic();
-	else BrainComponent->StopLogic("Stop");
+	if (IsOn)
+		BrainComponent->StartLogic();
+	else
+		BrainComponent->StopLogic("Stop");
 }
 
 void AAIControllerCustom::SetIsHearNoise(bool IsOn) const
@@ -123,7 +130,7 @@ void AAIControllerCustom::BotVisionHandler()
 
 	BlackboardComp->SetValueAsBool("IsHasPlayer", IsHasPlayer);
 
-	if(IsHasPlayer)
+	if (IsHasPlayer)
 	{
 		BlackboardComp->SetValueAsObject("Player", PlayerEnemy);
 	}
@@ -141,7 +148,7 @@ void AAIControllerCustom::BotHearingHandler()
 	{
 		SetIsHearNoise(false);
 		if (StimulusCurrent.WasSuccessfullySensed())
-		{	
+		{
 			SetIsHearNoise(true);
 			BlackboardComp->SetValueAsVector("NoiseLocation", CalculateNoiseLocation(StimulusCurrent.StimulusLocation, StimulusCurrent.ReceiverLocation));
 		}

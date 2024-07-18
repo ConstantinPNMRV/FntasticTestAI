@@ -1,18 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Bot.h"
 #include "AIControllerCustom.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/NavMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-
-// Sets default values
 ABot::ABot()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Инициализация SkeletalMesh
@@ -21,19 +18,23 @@ ABot::ABot()
 	SkeletalMeshComponent->SetRelativeRotation(FRotator(0, 270, 0));
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> BotSkeletalMesh(TEXT("SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny_Simple.SKM_Manny_Simple'"));
-	if (BotSkeletalMesh.Succeeded()) SkeletalMeshComponent->SetSkeletalMesh(BotSkeletalMesh.Object);
+	if (BotSkeletalMesh.Succeeded())
+		SkeletalMeshComponent->SetSkeletalMesh(BotSkeletalMesh.Object);
 
 	// Задание AnimBlueprint для SkeletalMesh
 	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> BotAnimBlueprint(TEXT("AnimBlueprint'/Game/Characters/Mannequins/Animations/ABP_Manny.ABP_Manny'"));
-	if (BotAnimBlueprint.Succeeded()) SkeletalMeshComponent->SetAnimClass(BotAnimBlueprint.Object->GeneratedClass);
+	if (BotAnimBlueprint.Succeeded())
+		SkeletalMeshComponent->SetAnimClass(BotAnimBlueprint.Object->GeneratedClass);
 
 	// Инициализация BehaviorTree
 	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BotBehaviorTree(TEXT("BehaviorTree'/Game/Blueprints/BT_BotCharacter.BT_BotCharacter'"));
-	if (BotBehaviorTree.Succeeded()) BehaviorTree = BotBehaviorTree.Object;
+	if (BotBehaviorTree.Succeeded())
+		BehaviorTree = BotBehaviorTree.Object;
 
 	// Перезапись класса AIController по умолчанию
 	static ConstructorHelpers::FClassFinder<AAIControllerCustom> BotAIControllerCustom(TEXT("/Script/CoreUObject.Class'/Script/TestAI.AIControllerCustom'"));
-	if (BotAIControllerCustom.Succeeded()) AIControllerClass = BotAIControllerCustom.Class;
+	if (BotAIControllerCustom.Succeeded())
+		AIControllerClass = BotAIControllerCustom.Class;
 
 	// Подписываемся на OnComponentHit от капсулы
 	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ABot::BindOnComponentHit);
@@ -46,7 +47,6 @@ ABot::ABot()
 	bUseControllerRotationYaw = false;
 }
 
-// Called when the game starts or when spawned
 void ABot::BeginPlay()
 {
 	Super::BeginPlay();
@@ -69,11 +69,9 @@ void ABot::BindOnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
 	}
 }
 
-// Called every frame
 void ABot::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 UBehaviorTree* ABot::GetBehaviorTree() const
@@ -86,7 +84,6 @@ void ABot::SetEnableBehaviorTree(bool IsOn)
 	AAIControllerCustom* AIControllerCustom = Cast<AAIControllerCustom>(GetController());
 	AIControllerCustom->SetEnableBehaviorTree(IsOn);
 
-	if (IsOn) HitCounter = 0;
+	if (IsOn)
+		HitCounter = 0;
 }
-
-
